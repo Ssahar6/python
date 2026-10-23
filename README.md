@@ -48,7 +48,7 @@ Cost per lead doubled from ₪8.78 to ₪17.74 (Feb → Jun 2025). An exact log 
 the increase happened before the click**: ads cost 65% more to show and the click rate fell 28%,
 while the share of clickers who signed up rose 14%.
 
-
+<img src="images/cs1_cpl_decomposition.svg" alt="Share of the cost-per-lead increase by funnel step" width="640">
 
 ### 2 · [The missing link between leads and sales](case-studies/02-the-missing-link-between-leads-and-sales.md)
 
@@ -56,7 +56,7 @@ Monthly payments were about **2.5× higher** while the lead campaigns ran — bu
 coming in before them, and **no payment is linked to the channel that brought the customer**. The
 real finding is a measurement gap: the customer journey was never tracked end to end.
 
-
+<img src="images/cs2_payments_vs_ad_spend.svg" alt="Customer payments and Meta ad spend per month, by period" width="640">
 
 ### 3 · [Could I have detected rising CPL earlier?](case-studies/03-could-i-have-detected-rising-cpl-earlier.md)
 
@@ -64,7 +64,7 @@ A simple daily rule — 7-day cost per lead more than 30% above all earlier days
 retrospectively, would have fired on **1 March 2025**, about a month before a monthly report.
 While it stayed on, ₪8,874 bought 512 leads at ₪17.33.
 
-
+<img src="images/cs3_cpl_alert_backtest.svg" alt="Rolling 7-day CPL against the alert threshold" width="640">
 
 ---
 
