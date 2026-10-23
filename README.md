@@ -2,75 +2,117 @@
 
 **A Data Analyst portfolio project on my own business's real data** · Sun Sahar
 
-I ran a small trading-education business. Meta ads brought plenty of leads, but costs rose and
-too few leads became paying customers. At the time I judged everything by lead count and cost per
-lead. In this project I went back to the data to find out what it could have told me, and what
-it never could.
+I ran a small trading-education business. Meta ads brought in plenty of leads, but costs kept
+rising and too few leads became paying customers. At the time I judged results mainly by lead
+count and cost per lead. Here I went back to the data to find out what it could have told me —
+and what it never could.
 
-| | |
-|---|---|
-| 📊 Presentation | [`The_Data_I_Had.pdf`](The_Data_I_Had.pdf): 9 slides plus a 2-slide appendix |
-| 📈 Live dashboard | [Looker Studio](https://datastudio.google.com/reporting/517f4b3d-41fb-49b6-b738-0b5f93a7f9a8) (Meta Ads analysis) |
-| 🧮 SQL | [`The_Data_I_Had_SQL.sql`](The_Data_I_Had_SQL.sql): every query, each with question, method and result |
-| 🐍 Python | cleaning, anonymisation and check scripts in this repository |
+**[📊 Presentation (PDF)](The_Data_I_Had.pdf)** ·
+**[📈 Live dashboard](https://datastudio.google.com/reporting/517f4b3d-41fb-49b6-b738-0b5f93a7f9a8)** ·
+**[🧮 SQL](The_Data_I_Had_SQL.sql)** ·
+**[🧭 Methodology, step by step](METHODOLOGY.md)** ·
+**[📄 The story behind the project](The_Story_Behind_the_Project.pdf)**
 
-## Data and tools
+---
 
-- **Meta Ads daily exports**, 2 ad accounts, Jun 2024 – Jan 2026: ₪39,487 spend, 1,923 Meta-attributed leads.
-  The export held 92,028 rows, but 99% were zero-spend padding; only the 595 ad-days with spend are activity.
-- **Student payments**: 50 payments by 38 customers, ₪142,234 excl. VAT. Names were replaced by anonymous IDs.
-- **CRM snapshot**: 130 leads, used as aggregate counts only.
-- **Tools**: Python (cleaning and checks) → BigQuery SQL (CTEs, window functions) → Looker Studio → slide deck.
+## Business problem
 
-## Three findings
+Leads were cheap at first, then doubled in price, and the step from lead to sale was barely
+measured. Three questions drive the project:
 
-1. **Most of the cost-per-lead rise happened before the click.** From February to June 2025 the
-   cost per lead doubled (₪8.78 → ₪17.74). Impressions cost 65% more and the click rate fell 29%,
-   while the share of clicks becoming leads rose 14%. This is an exact arithmetic split, not proof of cause.
-2. **The journey after the lead was barely measured.** In a 130-lead CRM snapshot only 3 leads (2.3%)
-   had a meeting scheduled. It is a single snapshot, but leads were counted precisely while calls,
-   meetings and sales were not.
-3. **Payments were 2.5× higher per month while the lead campaigns ran.** The comparison is ₪11,996 a month
-   against ₪4,795 before. But sales were already coming in before the ads, and no payment is linked to
-   the channel that brought the customer. The timing fits; the cause is unproven.
+1. **Why did leads get more expensive?**
+2. **Why didn't more leads become paying customers — and could I tell which advertising worked?**
+3. **Could I have seen the problem earlier?**
 
-## Decisions they support
+## Data and verified metrics
 
-- Tag every lead and customer with its source, and record each step: called, meeting scheduled,
-  held, sale. This makes cost per sale measurable.
-- Steer by **cost per scheduled meeting**, not cost per lead. In the what-if plan, the meeting rate
-  moves the result more than ad prices do.
-- Give every creative a unique name, and use a daily cost-per-lead check. A back-tested rule would
-  have flagged the March 2025 rise about a month before the monthly report.
+| Data | Scope | Verified figures |
+|---|---|---|
+| Meta Ads daily export (2 ad accounts) | Jun 2024 – Jan 2026 | ₪39,487 spend · 1,923 Meta-attributed leads · ₪15.28 per lead (lead campaigns) |
+| Payment records (anonymised) | Jun 2024 – Mar 2026 | 38 paying customers · 50 payments · ₪142,234 excl. VAT |
+| CRM snapshot | 130 leads, reviewed once (Apr–May 2025) | 3 meetings scheduled · 34 still in process |
+
+The ad export held 92,028 rows, but 99% were zero-spend padding; only the 595 ad-days with spend
+are activity. Every rate is calculated from totals (sum ÷ sum), never by averaging daily rates.
+
+**Tech stack:** BigQuery SQL (CTEs, window functions) · Python (cleaning, anonymisation, checks) ·
+Looker Studio (dashboard)
+
+---
+
+## Case studies
+
+### 1 · [Why did my leads get more expensive?](case-studies/01-why-leads-got-more-expensive.md)
+
+Cost per lead doubled from ₪8.78 to ₪17.74 (Feb → Jun 2025). An exact log split shows **most of
+the increase happened before the click**: ads cost 65% more to show and the click rate fell 28%,
+while the share of clickers who signed up rose 14%.
+
+<img src="images/cs1_cpl_decomposition.svg" alt="Share of the cost-per-lead increase by funnel step" width="640">
+
+### 2 · [The missing link between leads and sales](case-studies/02-the-missing-link-between-leads-and-sales.md)
+
+Monthly payments were about **2.5× higher** while the lead campaigns ran — but sales were already
+coming in before them, and **no payment is linked to the channel that brought the customer**. The
+real finding is a measurement gap: the customer journey was never tracked end to end.
+
+<img src="images/cs2_payments_vs_ad_spend.svg" alt="Customer payments and Meta ad spend per month, by period" width="640">
+
+### 3 · [Could I have detected rising CPL earlier?](case-studies/03-could-i-have-detected-rising-cpl-earlier.md)
+
+A simple daily rule — 7-day cost per lead more than 30% above all earlier days — tested
+retrospectively, would have fired on **1 March 2025**, about a month before a monthly report.
+While it stayed on, ₪8,874 bought 512 leads at ₪17.33.
+
+<img src="images/cs3_cpl_alert_backtest.svg" alt="Rolling 7-day CPL against the alert threshold" width="640">
+
+---
+
+## Recommendations
+
+- **Measure the full journey:** tag every lead and customer with its source, and record called →
+  meeting scheduled → meeting held → sale.
+- **Steer by cost per scheduled meeting,** not cost per lead.
+- **Investigate before the click first** when costs rise: creative and audience tests.
+- **Add a daily cost-per-lead check** that triggers an investigation, with thresholds validated on new data.
+- **Name every creative uniquely,** so tests can show what worked.
 
 ## Limitations
 
-- No payment is linked to an ad, so there is **no CAC, ROAS or profit** figure. Payments are gross,
-  counted when received.
-- The meeting rate comes from one CRM snapshot. The what-if plan is a scenario, not a forecast.
-- The alert rule was tested only on past data, and its 30% threshold was chosen, not optimised.
-- Many creatives ran under one ad name, so individual creatives cannot be compared.
+- No payment is linked to an ad, so there is **no CAC, ROAS or profit** figure; period comparisons
+  show timing, not cause.
+- The meeting rate comes from **one CRM snapshot** of 130 leads.
+- The alert is a **retrospective backtest** with one chosen threshold, not a validated predictive model.
+- An earlier business record of 46 students could not be reconciled with the payment data; all
+  payment figures use the 38 customers in the payment records.
 
-## Files in this repository
+---
 
-| File | What it does |
-|---|---|
-| `The_Data_I_Had.pdf` | the presentation |
-| `The_Data_I_Had_SQL.sql` | all BigQuery queries, in story order |
-| `prepare_ads.py` | cleans the two Meta Ads exports and checks the totals (92,028 rows, ₪39,486.56, 1,923 leads) |
-| `retrospective_audit.py` | sums spend and leads by objective, month and lead type; splits cost-per-lead changes |
-| `check_aggregate_consistency.py` | cross-checks the earlier summaries: 283 of 284 checks pass, one ₪0.01 rounding gap |
-| `prepare_payments.py` | turns the receipts export into an anonymous payments file: names become IDs, notes removed |
-| `check_payments.py` | checks the payments file: 50 payments, 38 customers, ₪142,234, none outside the analysed periods |
-
-## How it was built
+## How this project was built
 
 This project was built with **AI-assisted development**. AI tools wrote the SQL and Python. I
-supplied the business context and the data, defined and refined the questions, ran the queries in
-BigQuery, built the dashboard, challenged results that did not match the business, and interpreted
-the findings.
+supplied the business context and the data, helped define and refine the research questions, ran
+the queries in BigQuery, built the dashboard with guidance, challenged results that did not match
+the business, and interpreted the findings.
+
+## Repository contents
+
+| File | What it is |
+|---|---|
+| [`The_Data_I_Had.pdf`](The_Data_I_Had.pdf) | the full presentation (9 slides + appendix) |
+| [`The_Story_Behind_the_Project.pdf`](The_Story_Behind_the_Project.pdf) | the business context in two pages |
+| [`METHODOLOGY.md`](METHODOLOGY.md) | how the project was built, step by step, with the check at each step |
+| [`case-studies/`](case-studies/) | the three case studies |
+| [`The_Data_I_Had_SQL.sql`](The_Data_I_Had_SQL.sql) | every BigQuery query, in story order, each with question, method and result |
+| `prepare_ads.py` | cleans the two Meta Ads exports and checks the totals |
+| `retrospective_audit.py` | sums spend and leads by objective, month and lead type |
+| `check_aggregate_consistency.py` | cross-checks the earlier summaries (283 of 284 checks pass; one ₪0.01 rounding gap) |
+| `prepare_payments.py` | turns the receipts export into an anonymous payments file |
+| `check_payments.py` | checks the payments file: counts, dates, periods |
+| `make_case_study_charts.py` | draws the three charts and checks every figure against the BigQuery results |
+| [`results/`](results/) | the daily alert series behind Case Study 3 (aggregate data) |
 
 ## Privacy
 
 No customer names, contact details or identifiable payment records are in this repository. The raw
-exports are private. The SQL runs against the private BigQuery dataset `bqproj26.meta_ads`.
+exports are private; the SQL runs against the private BigQuery dataset `bqproj26.meta_ads`.

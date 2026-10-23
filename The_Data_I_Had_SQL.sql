@@ -121,7 +121,7 @@ ORDER BY mechanism;
 -- up to 100%. The shares are contributions to the LOG change, not the % change of each
 -- metric (those are the *_change_pct columns). Arithmetic only: it shows where the change
 -- sits, not why it happened.
--- Result: CPL ₪8.78 → ₪17.74. CPM +65%, CTR −29%, click-to-lead +14%.
+-- Result: CPL ₪8.78 → ₪17.74. CPM +65%, CTR −28%, click-to-lead +14%.
 --         Shares of the log change: CPM 71%, CTR 48%, click-to-lead −19%.
 -- =====================================================================================
 WITH months AS (
@@ -360,8 +360,8 @@ FROM `bqproj26.meta_ads.student_payments`;
 -- before, 2 of 7 after) or no payments. Payments are counted when received (cash), so an
 -- instalment plan appears in the month of each instalment.
 -- This is a historical comparison of periods. Payments are not linked to ads, so it is not
--- attribution and not proof that the ads caused the sales (in the same months every lead
--- was also phoned).
+-- attribution and not proof that the ads caused the sales (in the same months we also tried to call
+-- every lead).
 -- Result: ≈ ₪4,795 a month before the lead campaigns, ≈ ₪11,996 during them (2.5×) and
 -- ≈ ₪2,843 after. Ad spend ₪2,560 / ₪30,248 / ₪6,679 (total ₪39,487).
 -- =====================================================================================
